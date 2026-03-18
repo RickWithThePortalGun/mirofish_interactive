@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MiroFish Interactive Tutorial
 
-## Getting Started
+An interactive web explainer for [MiroFish](https://github.com/666ghj/MiroFish) — an open-source AI swarm intelligence engine that simulates how opinions spread through social networks using multi-agent systems.
 
-First, run the development server:
+## What it does
+
+The tutorial walks users through a personalized 5-step wizard:
+
+1. **Overview** — How the MiroFish pipeline works end-to-end
+2. **Knowledge Graph** — D3.js force-directed graph showing how events, actors, and concepts are structured
+3. **Agent Swarm** — The 6 agent archetypes and how their traits shape behavior
+4. **Simulation** — A live opinion dynamics simulation across 20 agents in 3 clusters over 8 rounds, with deterministic influence propagation
+5. **Report & Chat** — AI-generated analysis and an interactive chat with any of the 6 agents
+
+A short personalization Q&A at the start uses GPT-4o-mini to generate level-appropriate explanations (beginner / intermediate / expert) for every step.
+
+## Stack
+
+- [Next.js](https://nextjs.org) 16 (App Router, TypeScript)
+- [shadcn/ui](https://ui.shadcn.com) + [Tailwind CSS](https://tailwindcss.com) v4
+- [D3.js](https://d3js.org) — force-directed knowledge graph
+- [Recharts](https://recharts.org) — opinion trend line chart
+- [Framer Motion](https://www.framer.com/motion) — step transitions
+- [OpenAI](https://platform.openai.com) GPT-4o-mini — personalization + agent chat
+- [next-themes](https://github.com/pacocoursey/next-themes) — light / dark mode
+
+## Getting started
+
+```bash
+git clone https://github.com/your-username/mirofish-tutorial
+cd mirofish-tutorial
+npm install
+```
+
+Copy the example env file and add your OpenAI key:
+
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local`:
+
+```
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+Start the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Optimized for [Vercel](https://vercel.com). After connecting your repository:
 
-## Learn More
+1. Add `OPENAI_API_KEY` as an environment variable in the Vercel project settings
+2. Deploy — Next.js is auto-detected, API routes run as serverless functions
 
-To learn more about Next.js, take a look at the following resources:
+## Project structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+  app/
+    api/
+      chat/route.ts         # Streaming agent chat (6 agent personas)
+      personalize/route.ts  # Generates personalized step content via GPT-4o-mini
+    globals.css             # Void Space (dark) + Alabaster Pure (light) theme variables
+    layout.tsx
+    page.tsx                # Main wizard — onboarding gate + 5 steps
+  components/
+    onboarding.tsx          # 3-question Q&A → personalization profile
+    explanation-panel.tsx   # Level-aware content renderer (beginner/intermediate/expert)
+    steps/
+      step1-overview.tsx
+      step2-knowledge-graph.tsx   # D3 force-directed graph
+      step3-agents.tsx
+      step4-simulation.tsx        # Opinion dynamics simulation
+      step5-report.tsx            # Report + multi-agent chat
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
